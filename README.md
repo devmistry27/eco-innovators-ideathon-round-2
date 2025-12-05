@@ -78,7 +78,7 @@ The system implements the geospatial logic defined in the challenge requirements
 2.  **Buffer Zone 2 (2400 sq.ft):** If no panel is found in Zone 1, the search radius expands to 2400 sq.ft.
 3.  **Area Estimation:** If a panel is detected, its pixel area is converted to square meters based on the latitude-specific projection scale.
 
-## 6. Output Artifacts
+## 5. Output Artifacts
 
 ### JSON Output
 The `all_predictions.json` file contains structured data for automated auditing:
@@ -110,7 +110,7 @@ The system generates overlay images (`sample_id_overlay.png`) for manual review:
 ![Output Example](./predictions/1004.0/1004.0_overlay.png)
 ![Output Example](./predictions/1001.0/1001.0_overlay.png)
 
-## 7. Model Performance
+## 6. Model Performance
 
 The model was trained on a composite dataset combining Roboflow 100, LSGI547, and other open-source libraries.
 
@@ -121,7 +121,7 @@ The model was trained on a composite dataset combining Roboflow 100, LSGI547, an
 | **Recall** | 0.837 | Sensitivity |
 | **F1 Score** | 0.857 | Harmonic mean of Precision and Recall |
 
-## 8. License and Attribution
+## 7. License and Attribution
 
 *   **Code License:** MIT License.
 *   **Imagery:** Google Maps Static API. Usage must comply with Google's Terms of Service.
