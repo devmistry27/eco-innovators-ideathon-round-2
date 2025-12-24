@@ -56,15 +56,19 @@ class DetectionVisualizer:
         logger.info(f"Saved visualization: {output_path}")
     
     def _draw_buffer_zone(self, img, center, radius):
-        """Draw buffer zone circle."""
+        """Draw buffer zone circle - prominent yellow circle."""
+        # Draw thicker circle with fill for visibility
         cv2.circle(img, (int(center[0]), int(center[1])), 
-                  int(radius), (255, 255, 0), 2)
+                  int(radius), (0, 255, 255), 3)  # Yellow, thicker line
+        # Draw center point
+        cv2.circle(img, (int(center[0]), int(center[1])), 
+                  5, (0, 255, 255), -1)  # Center dot
     
     def _draw_all_panels(self, img, polygons):
-        """Draw all detected panels in yellow outline."""
+        """Draw non-selected panels in red outline."""
         for poly, _ in polygons:
             coords = np.array(poly.exterior.coords, dtype=np.int32)
-            cv2.polylines(img, [coords], True, (0, 255, 255), 1)
+            cv2.polylines(img, [coords], True, (0, 0, 255), 2)  # Red for non-selected
     
     def _draw_selected_panel(self, img, poly):
         """Draw the selected best panel with green fill and outline."""
@@ -72,10 +76,16 @@ class DetectionVisualizer:
         cv2.fillPoly(img, [coords], (0, 255, 0))
         cv2.polylines(img, [coords], True, (0, 255, 0), 3)
         
-        # Add label
+        # Add centroid marker (magenta)
         centroid = poly.centroid
+        cv2.circle(img, (int(centroid.x), int(centroid.y)), 
+                  8, (255, 0, 255), -1)  # Magenta centroid
+        cv2.circle(img, (int(centroid.x), int(centroid.y)), 
+                  8, (255, 255, 255), 2)  # White outline
+        
+        # Add label
         cv2.putText(img, "TARGET PANEL", 
-                   (int(centroid.x) - 50, int(centroid.y)),
+                   (int(centroid.x) - 50, int(centroid.y) - 15),
                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 2)
     
     def _add_annotations(self, img, buffer_sqft, has_solar):
@@ -89,3 +99,16 @@ class DetectionVisualizer:
         color = (0, 255, 0) if has_solar else (0, 0, 255)
         cv2.putText(img, status_text, (10, 60), 
                    cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2)
+        
+        # Legend
+        cv2.putText(img, "Legend:", (10, img.shape[0] - 80),
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+        cv2.circle(img, (20, img.shape[0] - 55), 6, (0, 255, 255), -1)
+        cv2.putText(img, "Buffer Zone", (35, img.shape[0] - 50),
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
+        cv2.rectangle(img, (15, img.shape[0] - 38), (25, img.shape[0] - 28), (0, 255, 0), -1)
+        cv2.putText(img, "Selected Panel", (35, img.shape[0] - 30),
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
+        cv2.rectangle(img, (15, img.shape[0] - 18), (25, img.shape[0] - 8), (0, 0, 255), -1)
+        cv2.putText(img, "Other Panels", (35, img.shape[0] - 10),
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)

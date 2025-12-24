@@ -15,7 +15,9 @@ class Config:
     GOOGLE_MAPS_API_KEY = os.getenv('GOOGLE_MAPS_API_KEY', '')
     
     # Model Configuration
+    # Priority: yolov12_seg > yolo11_seg > yolo_seg > best.pt
     MODEL_PATH = os.getenv('MODEL_PATH', 'model/best.pt')
+    MODEL_TYPE = os.getenv('MODEL_TYPE', 'yolov8')  # Options: yolov8, yolo11, yolo12
     CONFIDENCE_THRESHOLD = float(os.getenv('CONFIDENCE_THRESHOLD', 0.25))
     
     # Directory Paths

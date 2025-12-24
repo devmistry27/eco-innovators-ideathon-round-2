@@ -35,9 +35,9 @@ class GoogleMapsClient:
         """
         params = {
             "center": f"{lat},{lon}",
-            "zoom": self.zoom_level,
-            "size": self.request_size,
-            "scale": self.map_scale,
+            "zoom": self.zoom_level,# 20 is max zoom level
+            "size": self.request_size, 
+            "scale": self.map_scale, # 2
             "maptype": "satellite",
             "key": self.api_key
         }

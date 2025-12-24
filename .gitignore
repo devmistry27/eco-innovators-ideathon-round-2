@@ -33,6 +33,7 @@ ENV/
 # Jupyter Notebooks (if used)
 .ipynb_checkpoints/
 *.ipynb
+!training_v2.ipynb
 
 # Output folders (generated files)
 predictions/*.jpg

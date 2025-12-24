@@ -23,9 +23,18 @@ class SolarPanelDetector:
         """Load detection model."""
         device = self._get_device()
         
-        logger.info(f"Loading model from {self.model_path}")
+        # Detect model type from filename
+        model_path_lower = self.model_path.lower()
+        if 'yolo12' in model_path_lower or 'yolov12' in model_path_lower:
+            model_type = 'yolov8'  # SAHI uses yolov8 for yolo11/12 compatibility
+        elif 'yolo11' in model_path_lower:
+            model_type = 'yolov8'  # SAHI uses yolov8 for yolo11 compatibility
+        else:
+            model_type = 'yolov8'
+        
+        logger.info(f"Loading model from {self.model_path} (type: {model_type})")
         self.model = AutoDetectionModel.from_pretrained(
-            model_type='yolov8',
+            model_type=model_type,
             model_path=self.model_path,
             confidence_threshold=self.confidence_threshold,
             device=device

@@ -2,6 +2,7 @@ import json
 import logging
 import pandas as pd
 from pathlib import Path
+from math import sqrt
 
 from .config import Config
 from .api_client import GoogleMapsClient
@@ -106,6 +107,14 @@ class SolarDetectionPipeline:
             all_polygons, center_px, radius_1_px, radius_2_px, meters_per_px
         )
         
+        # Calculate euclidean distance from panel centroid to given coordinates
+        euclidean_dist = 0.0
+        if result_data['polygon'] is not None:
+            panel_centroid = result_data['polygon'].centroid
+            cx_offset = panel_centroid.x - center_px[0]
+            cy_offset = panel_centroid.y - center_px[1]
+            euclidean_dist = sqrt(cx_offset**2 + cy_offset**2) * meters_per_px
+        
         output_record = {
             "sample_id": int(sample_id),
             "lat": lat,
@@ -114,6 +123,7 @@ class SolarDetectionPipeline:
             "confidence": round(result_data['confidence'], 4),
             "pv_area_sqm_est": round(result_data['area_sqm'], 2),
             "buffer_radius_sqft": result_data['buffer_sqft'],
+            "euclidean_distance_m_est": round(euclidean_dist, 2),
             "qc_status": "VERIFIABLE" if is_verifiable else "NOT_VERIFIABLE",
             "bbox_or_mask": encode_polygon(result_data['polygon']),
             "image_metadata": {
