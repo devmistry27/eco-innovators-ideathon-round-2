@@ -16,7 +16,7 @@ env/
 ENV/
 .venv/
 .conda/
-
+datasets
 # Environment variables
 .env
 .env.local
@@ -34,6 +34,7 @@ ENV/
 .ipynb_checkpoints/
 *.ipynb
 !training_v2.ipynb
+!training_v3.ipynb
 
 # Output folders (generated files)
 predictions/*.jpg

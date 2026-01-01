@@ -1,5 +1,5 @@
 """
-Image quality assessment and preprocessing.
+Image quality assessment for satellite imagery.
 """
 
 import cv2
@@ -10,18 +10,21 @@ logger = logging.getLogger(__name__)
 
 
 class ImageQualityChecker:
-    def __init__(self, brightness_low, brightness_high, cloud_threshold, min_variance):
+    """Check if image quality is sufficient for reliable detection."""
+    
+    def __init__(self, brightness_low: int = 30, brightness_high: int = 225,
+                 cloud_threshold: float = 0.7, min_variance: float = 100):
         self.brightness_low = brightness_low
         self.brightness_high = brightness_high
         self.cloud_threshold = cloud_threshold
         self.min_variance = min_variance
     
-    def check_quality(self, image_path):
+    def check_quality(self, image_path: str) -> tuple:
         """
-        Assess if image quality is sufficient for detection.
+        Assess image quality for detection.
         
         Returns:
-            tuple: (is_verifiable: bool, reason: str)
+            (is_verifiable: bool, reason: str)
         """
         try:
             img = cv2.imread(str(image_path))
@@ -30,25 +33,23 @@ class ImageQualityChecker:
             
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             
-            # Check for darkness (shadows/poor lighting)
+            # Check brightness (shadows/poor lighting)
             mean_brightness = np.mean(gray)
             if mean_brightness < self.brightness_low:
-                return False, "Image too dark (shadows/poor lighting)"
+                return False, "Image too dark"
             
-            # Check for cloud cover
-            bright_pixels = np.sum(gray > self.brightness_high)
-            bright_ratio = bright_pixels / gray.size
-            
+            # Check cloud cover (too bright)
+            bright_ratio = np.sum(gray > self.brightness_high) / gray.size
             if bright_ratio > self.cloud_threshold:
-                return False, "Heavy cloud cover detected"
+                return False, "Heavy cloud cover"
             
-            # Check image detail/variance
+            # Check image detail (variance)
             variance = np.var(gray)
             if variance < self.min_variance:
-                return False, "Low image detail (possibly occluded)"
+                return False, "Low image detail"
             
             return True, "Good quality"
             
         except Exception as e:
-            logger.error(f"Error during quality check: {e}")
-            return False, f"Quality check error: {str(e)}"
+            logger.error(f"Quality check error: {e}")
+            return False, f"Error: {str(e)}"
