@@ -1,0 +1,74 @@
+[
+  {
+    "sample_id": 1001,
+    "lat": 23.908454,
+    "lon": 71.182617,
+    "has_solar": true,
+    "confidence": 0.7633,
+    "pv_area_sqm_est": 234.42,
+    "buffer_radius_sqft": 1200,
+    "euclidean_distance_m_est": 5.16,
+    "qc_status": "VERIFIABLE",
+    "bbox_or_mask": "[[267.0, 442.13], [895.95, 442.13], [895.95, 522.16], [267.0, 522.16], [267.0, 442.13]]",
+    "image_metadata": {
+      "source": "Google Maps Static API",
+      "size": "1024x1024",
+      "meters_per_px": 0.06824,
+      "quality_check": "Good quality"
+    }
+  },
+  {
+    "sample_id": 1002,
+    "lat": 28.7041,
+    "lon": 77.1025,
+    "has_solar": false,
+    "confidence": 0.0,
+    "pv_area_sqm_est": 0.0,
+    "buffer_radius_sqft": 2400,
+    "euclidean_distance_m_est": 0.0,
+    "qc_status": "VERIFIABLE",
+    "bbox_or_mask": "",
+    "image_metadata": {
+      "source": "Google Maps Static API",
+      "size": "1024x1024",
+      "meters_per_px": 0.06547,
+      "quality_check": "Good quality"
+    }
+  },
+  {
+    "sample_id": 1003,
+    "lat": 19.071652757114403,
+    "lon": 72.87738459697225,
+    "has_solar": true,
+    "confidence": 0.8816,
+    "pv_area_sqm_est": 796.77,
+    "buffer_radius_sqft": 1200,
+    "euclidean_distance_m_est": 1.98,
+    "qc_status": "VERIFIABLE",
+    "bbox_or_mask": "[[315.14, 316.58], [757.24, 316.58], [757.24, 678.69], [315.14, 678.69], [315.14, 316.58]]",
+    "image_metadata": {
+      "source": "Google Maps Static API",
+      "size": "1024x1024",
+      "meters_per_px": 0.07055,
+      "quality_check": "Good quality"
+    }
+  },
+  {
+    "sample_id": 1004,
+    "lat": 21.19504818778378,
+    "lon": 72.90183627422766,
+    "has_solar": true,
+    "confidence": 0.7431,
+    "pv_area_sqm_est": 49.15,
+    "buffer_radius_sqft": 1200,
+    "euclidean_distance_m_est": 7.78,
+    "qc_status": "VERIFIABLE",
+    "bbox_or_mask": "[[568.77, 450.03], [676.89, 450.03], [676.89, 543.89], [568.77, 543.89], [568.77, 450.03]]",
+    "image_metadata": {
+      "source": "Google Maps Static API",
+      "size": "1024x1024",
+      "meters_per_px": 0.0696,
+      "quality_check": "Good quality"
+    }
+  }
+]
