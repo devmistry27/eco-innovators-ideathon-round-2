@@ -43,7 +43,11 @@ my-app/
    Create a `.env` file in the root directory:
    ```env
    GOOGLE_MAPS_API_KEY=your_api_key_here
-   MODEL_PATH=trained_model/OBB-1024-FT-ON-640px-MODEL.pt
+   MODEL_PATH=trained_model\OBB-1024-FT-ON-640px-MODEL.pt
+
+   INPUT_FOLDER=input_folder
+   OUTPUT_FOLDER=prediction_files
+   ARTEFACTS_FOLDER=artefacts
    ```
 
 ## Usage
