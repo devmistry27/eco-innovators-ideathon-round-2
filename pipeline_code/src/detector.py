@@ -135,7 +135,7 @@ class SolarDetector:
             obb_confs = res.obb.conf.cpu().numpy()
             
             for i in range(len(obb_boxes)):
-                points = obb_boxes[i].reshape(-1, 2).tolist()
+                points = [[float(p[0]), float(p[1])] for p in obb_boxes[i].reshape(-1, 2)]
                 bbox = obb_to_bbox(points)
                 boxes.append({
                     'bbox': bbox,
@@ -152,7 +152,7 @@ class SolarDetector:
                 x1, y1, x2, y2 = det_boxes[i]
                 bbox = [float(x1), float(y1), float(x2), float(y2)]
                 # Create 4 points for compatibility with OBB visualizer
-                points = [[x1, y1], [x2, y1], [x2, y2], [x1, y2]]
+                points = [[float(x1), float(y1)], [float(x2), float(y1)], [float(x2), float(y2)], [float(x1), float(y2)]]
                 boxes.append({
                     'bbox': bbox,
                     'obb_points': points

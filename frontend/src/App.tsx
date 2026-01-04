@@ -166,10 +166,10 @@ function App() {
           <div className="p-6">
             <div className="mb-6">
               <h2 className="text-3xl font-bold mb-2 tracking-tight text-white">
-                Solar Potential
+                SolarSight
               </h2>
               <p className="text-sm text-zinc-400 leading-relaxed font-light">
-                Unlock the solar potential of any location. Analyze satellite imagery instantly with our AI.
+                Discover solar panel anywhere using AI-powered satellite analysis.
               </p>
             </div>
 
