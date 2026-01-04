@@ -401,7 +401,6 @@ function App() {
             
             <div className="mt-6 pt-6 border-t border-white/5 flex justify-between items-center text-xs text-zinc-500">
                <span>Model: <span className="text-zinc-300">{health?.model_type || 'Unknown'}</span></span>
-               <span>SAHI: <span className={health?.use_sahi ? "text-blue-400" : "text-zinc-300"}>{health?.use_sahi ? 'Active' : 'Off'}</span></span>
             </div>
           </div>
         </div>
