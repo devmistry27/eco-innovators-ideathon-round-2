@@ -2,16 +2,16 @@
 Solar Panel Detection System - Package exports.
 """
 
-from .config import Config
+from .config import AppConfig as Config
 from .pipeline import SolarDetectionPipeline
-from .detector import SolarPanelDetector
-from .visualizer import DetectionVisualizer
+from .detector import SolarDetector
+from .visualizer import Visualizer
 
 __all__ = [
     'Config',
     'SolarDetectionPipeline', 
-    'SolarPanelDetector',
-    'DetectionVisualizer'
+    'SolarDetector',
+    'Visualizer'
 ]
 
 __version__ = '2.0.0'

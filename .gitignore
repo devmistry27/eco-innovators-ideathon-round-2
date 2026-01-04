@@ -9,7 +9,7 @@ __pycache__/
 dist/
 build/
 *.whl
-
+artefacts
 # Virtual Environments
 venv/
 env/
@@ -17,6 +17,7 @@ ENV/
 .venv/
 .conda/
 datasets
+docs/
 # Environment variables
 .env
 .env.local

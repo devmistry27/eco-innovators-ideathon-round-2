@@ -1,24 +1,26 @@
 [
   {
-    "sample_id": 1001,
+    "sample_id": "1001.0",
     "lat": 23.908454,
     "lon": 71.182617,
     "has_solar": true,
-    "confidence": 0.7633,
-    "pv_area_sqm_est": 234.42,
+    "confidence": 0.6007,
+    "pv_area_sqm_est": 657.9,
     "buffer_radius_sqft": 1200,
-    "euclidean_distance_m_est": 5.16,
+    "euclidean_distance_m_est": 17.07,
     "qc_status": "VERIFIABLE",
-    "bbox_or_mask": "[[267.0, 442.13], [895.95, 442.13], [895.95, 522.16], [267.0, 522.16], [267.0, 442.13]]",
+    "bbox_or_mask": "[[461.54925537109375, 512.7276000976562], [849.0463256835938, 334.42132568359375], [710.5953979492188, 33.53826141357422], [323.09832763671875, 211.84454345703125]]",
+    "detection_method": "initial_1200",
+    "image_url": "/files/1001.0/1001.0.jpg",
+    "overlay_url": "/files/1001.0/1001.0_overlay.png",
     "image_metadata": {
       "source": "Google Maps Static API",
-      "size": "1024x1024",
-      "meters_per_px": 0.06824,
-      "quality_check": "Good quality"
+      "capture_date": "2026-01-04",
+      "qc_reason": "Quality OK"
     }
   },
   {
-    "sample_id": 1002,
+    "sample_id": "1002.0",
     "lat": 28.7041,
     "lon": 77.1025,
     "has_solar": false,
@@ -27,48 +29,54 @@
     "buffer_radius_sqft": 2400,
     "euclidean_distance_m_est": 0.0,
     "qc_status": "VERIFIABLE",
-    "bbox_or_mask": "",
+    "bbox_or_mask": "[]",
+    "detection_method": "none",
+    "image_url": "/files/1002.0/1002.0.jpg",
+    "overlay_url": "/files/1002.0/1002.0_overlay.png",
     "image_metadata": {
       "source": "Google Maps Static API",
-      "size": "1024x1024",
-      "meters_per_px": 0.06547,
-      "quality_check": "Good quality"
+      "capture_date": "2026-01-04",
+      "qc_reason": "Quality OK"
     }
   },
   {
-    "sample_id": 1003,
+    "sample_id": "1003.0",
     "lat": 19.071652757114403,
     "lon": 72.87738459697225,
     "has_solar": true,
-    "confidence": 0.8816,
-    "pv_area_sqm_est": 796.77,
+    "confidence": 0.737,
+    "pv_area_sqm_est": 432.16,
     "buffer_radius_sqft": 1200,
-    "euclidean_distance_m_est": 1.98,
+    "euclidean_distance_m_est": 2.86,
     "qc_status": "VERIFIABLE",
-    "bbox_or_mask": "[[315.14, 316.58], [757.24, 316.58], [757.24, 678.69], [315.14, 678.69], [315.14, 316.58]]",
+    "bbox_or_mask": "[[341.85498046875, 605.4681396484375], [761.860107421875, 599.2825927734375], [758.8160400390625, 392.5896911621094], [338.8109130859375, 398.7752990722656]]",
+    "detection_method": "initial_1200",
+    "image_url": "/files/1003.0/1003.0.jpg",
+    "overlay_url": "/files/1003.0/1003.0_overlay.png",
     "image_metadata": {
       "source": "Google Maps Static API",
-      "size": "1024x1024",
-      "meters_per_px": 0.07055,
-      "quality_check": "Good quality"
+      "capture_date": "2026-01-04",
+      "qc_reason": "Quality OK"
     }
   },
   {
-    "sample_id": 1004,
+    "sample_id": "1004.0",
     "lat": 21.19504818778378,
     "lon": 72.90183627422766,
     "has_solar": true,
-    "confidence": 0.7431,
-    "pv_area_sqm_est": 49.15,
+    "confidence": 0.8862,
+    "pv_area_sqm_est": 42.54,
     "buffer_radius_sqft": 1200,
-    "euclidean_distance_m_est": 7.78,
+    "euclidean_distance_m_est": 8.02,
     "qc_status": "VERIFIABLE",
-    "bbox_or_mask": "[[568.77, 450.03], [676.89, 450.03], [676.89, 543.89], [568.77, 543.89], [568.77, 450.03]]",
+    "bbox_or_mask": "[[676.294677734375, 533.1553955078125], [676.6597900390625, 447.6995849609375], [573.89599609375, 447.260498046875], [573.5308837890625, 532.71630859375]]",
+    "detection_method": "initial_1200",
+    "image_url": "/files/1004.0/1004.0.jpg",
+    "overlay_url": "/files/1004.0/1004.0_overlay.png",
     "image_metadata": {
       "source": "Google Maps Static API",
-      "size": "1024x1024",
-      "meters_per_px": 0.0696,
-      "quality_check": "Good quality"
+      "capture_date": "2026-01-04",
+      "qc_reason": "Quality OK"
     }
   }
 ]

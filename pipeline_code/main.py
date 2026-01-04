@@ -6,24 +6,27 @@ EcoInnovators Ideathon 2026 - Round 2
 Team Akatsuki
 
 Usage:
-    python main.py
+    python main.py --input <path_to_input.xlsx> --output <output_folder_path>
 
 Configuration:
     Set environment variables in .env file:
     - GOOGLE_MAPS_API_KEY: Your Google Maps API key
-    - MODEL_TYPE: 'bbox' or 'segmentation' (default: segmentation)
-    - USE_SAHI: 'true' or 'false' (default: true)
+    - MODEL_PATH: Path to YOLO model
 """
 
 import logging
 import sys
+import argparse
 from pathlib import Path
+from dotenv import load_dotenv
 
-# Add src to path for imports
+# Add src to path for imports if needed
 sys.path.insert(0, str(Path(__file__).parent))
 
 from src.pipeline import SolarDetectionPipeline
 
+# Load environment variables
+load_dotenv()
 
 def setup_logging():
     """Configure logging format."""
@@ -38,21 +41,18 @@ def main():
     """Main entry point."""
     setup_logging()
     
-    print(r"""
-    ╔═══════════════════════════════════════════════════════════╗
-    ║   ____        _              ____                  _      ║
-    ║  / ___|  ___ | | __ _ _ __  |  _ \ __ _ _ __   ___| |___  ║
-    ║  \___ \ / _ \| |/ _` | '__| | |_) / _` | '_ \ / _ \ / __| ║
-    ║   ___) | (_) | | (_| | |    |  __/ (_| | | | |  __/ \__ \ ║
-    ║  |____/ \___/|_|\__,_|_|    |_|   \__,_|_| |_|\___|_|___/ ║
-    ║                                                           ║
-    ║           Team Akatsuki - EcoInnovators 2026              ║
-    ╚═══════════════════════════════════════════════════════════╝
-    """)
+    parser = argparse.ArgumentParser(description="Solar Panel Detection Pipeline")
+    parser.add_argument('--input', type=str, default=None, help='Path to input Excel file')
+    parser.add_argument('--output', type=str, default=None, help='Path to output folder')
+    
+    args = parser.parse_args()
+    
+    print("Starting Solar Panel Detection Pipeline...")
     
     try:
         pipeline = SolarDetectionPipeline()
-        pipeline.run()
+        pipeline.run(input_file=args.input, output_folder=args.output)
+        
     except KeyboardInterrupt:
         print("\n\nPipeline interrupted by user")
         sys.exit(0)
