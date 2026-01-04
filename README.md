@@ -66,6 +66,33 @@ python backend/server.py
 ```
 Access the API at `http://localhost:8008`.
 
+### Frontend Application
+To launch the modern web interface:
+
+1.  **Navigate to frontend directory:**
+    ```bash
+    cd frontend
+    ```
+2.  **Install dependencies:**
+    ```bash
+    bun install
+    # OR
+    npm install
+    ```
+3.  **Start the dev server:**
+    ```bash
+    bun run dev
+    # OR
+    npm run dev
+    ```
+    Open `http://localhost:5173` in your browser.
+
+**Features:**
+- **Interactive Map:** Click to select locations.
+- **Search:** Find any city or address.
+- **Batch Analysis:** Upload a CSV or Excel file (with `lat`,`lon` headers) to process multiple locations sequentially.
+
+
 ## Model Details
 - **Architecture:** YOLOv8-Medium OBB
 - **Input Resolution:** 1024px (Fine-tuned)

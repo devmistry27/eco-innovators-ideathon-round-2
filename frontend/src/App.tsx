@@ -8,9 +8,11 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Progress } from '@/components/ui/progress';
 import { analyzeLocation, checkHealth, getFileUrl, type AnalyzeResponse, type HealthResponse } from '@/lib/api';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { read, utils } from 'xlsx';
 
 // Fix default marker icon
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
@@ -64,6 +66,10 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searching, setSearching] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  // Batch State
+  const [batchResults, setBatchResults] = useState<AnalyzeResponse[]>([]);
+  const [batchProgress, setBatchProgress] = useState({ current: 0, total: 0 });
 
   const mapCenter: [number, number] = [parseFloat(lat) || 21.195, parseFloat(lon) || 72.901];
 
@@ -148,24 +154,6 @@ function App() {
                <div className="h-4 w-[1px] bg-white/20"></div>
                <p className="text-[11px] text-zinc-400 font-medium tracking-wide uppercase">Team Akatsuki</p>
             </div>
-
-            {/* Status */}
-            {/* <div className="pointer-events-auto">
-              {health ? (
-                <Badge variant="outline" className="bg-blue-500/10 border-blue-500/20 text-blue-400 gap-2 px-3 py-1.5 backdrop-blur-md rounded-full">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-                  </span>
-                  System Online
-                </Badge>
-              ) : (
-                <Badge variant="outline" className="bg-red-500/10 border-red-500/20 text-red-400 gap-2 px-3 py-1.5 backdrop-blur-md rounded-full">
-                   <div className="h-2 w-2 rounded-full bg-red-500" />
-                  Offline
-                </Badge>
-              )}
-            </div> */}
           </div>
         </header>
 
@@ -265,16 +253,148 @@ function App() {
                   </Button>
                 </TabsContent>
                 
-                 <TabsContent value="batch" className="mt-4">
-                    <Card className="border-2 border-dashed border-zinc-800 bg-transparent rounded-xl">
-                      <CardContent className="p-8 flex flex-col items-center justify-center text-center">
-                         <div className="p-4 rounded-full bg-zinc-900 mb-4">
-                            <Zap className="w-6 h-6 text-zinc-500" />
-                         </div>
-                         <p className="text-sm text-zinc-400 mb-4">Drag & drop CSV file here</p>
-                         <Button variant="secondary" size="sm" className="bg-zinc-800 text-zinc-300 hover:text-white rounded-lg">Browse Files</Button>
+                <TabsContent value="batch" className="mt-4">
+                  {loading && batchProgress.total > 0 ? (
+                    // 1. PROCESSING STATE
+                    <Card className="bg-zinc-900/50 border-zinc-800">
+                      <CardContent className="p-8 text-center space-y-6">
+                        <div className="relative mx-auto w-16 h-16 flex items-center justify-center">
+                          <div className="absolute inset-0 rounded-full border-t-2 border-blue-500 animate-spin"></div>
+                          <Loader2 className="w-8 h-8 text-blue-500 animate-pulse" />
+                        </div>
+                        <div className="space-y-2">
+                           <h3 className="text-lg font-medium text-white">Analyzing Satellite Imagery</h3>
+                           <p className="text-sm text-zinc-400">Processing site {batchProgress.current} of {batchProgress.total}</p>
+                        </div>
+                        <Progress value={(batchProgress.current / batchProgress.total) * 100} className="h-2" />
                       </CardContent>
                     </Card>
+                  ) : batchResults.length > 0 ? (
+                    // 2. RESULTS LIST STATE
+                    <div className="space-y-4">
+                       <div className="flex items-center justify-between px-1">
+                          <h3 className="text-sm font-medium text-zinc-400">Analysis Complete ({batchResults.length})</h3>
+                          <Button variant="ghost" size="sm" onClick={() => { setBatchResults([]); setBatchProgress({current:0, total:0}); }} className="h-8 text-xs hover:text-white">
+                             New Batch
+                          </Button>
+                       </div>
+                       
+                       <div className="space-y-2 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                          {batchResults.map((res, i) => (
+                             <div 
+                                key={i}
+                                onClick={() => { setResult(res); setShowResult(true); setSidebarOpen(false); }}
+                                className="group flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 transition-all cursor-pointer"
+                             >
+                                <div className="flex items-center gap-3">
+                                   <div className={`p-2 rounded-lg ${res.has_solar ? 'bg-blue-500/20 text-blue-400' : 'bg-red-500/10 text-red-400'}`}>
+                                      {res.has_solar ? <Zap className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
+                                   </div>
+                                   <div>
+                                      <p className="text-sm font-medium text-white group-hover:text-blue-200 transition-colors">
+                                         {res.lat.toFixed(4)}, {res.lon.toFixed(4)}
+                                      </p>
+                                      <div className="flex items-center gap-2 mt-0.5">
+                                         <Badge variant="outline" className="text-[10px] h-4 px-1 border-white/10 text-zinc-500">
+                                            {(res.confidence * 100).toFixed(0)}% Conf
+                                         </Badge>
+                                         <span className="text-[10px] text-zinc-600">ID: #{i+1}</span>
+                                      </div>
+                                   </div>
+                                </div>
+                                <ChevronLeft className="w-4 h-4 text-zinc-600 group-hover:text-white rotate-180 transition-colors" />
+                             </div>
+                          ))}
+                       </div>
+                    </div>
+                  ) : (
+                    // 3. UPLOAD STATE (Default)
+                    <Card className="border-2 border-dashed border-zinc-800 bg-transparent rounded-xl hover:border-zinc-700 hover:bg-zinc-900/30 transition-all group cursor-pointer" onClick={() => document.getElementById('csvUpload')?.click()}>
+                      <CardContent className="p-8 flex flex-col items-center justify-center text-center">
+                         <input
+                           type="file"
+                           id="csvUpload"
+                           accept=".csv, .xlsx, .xls"
+                           className="hidden"
+                           onChange={async (e) => {
+                             const file = e.target.files?.[0];
+                             if (!file) return;
+                             
+                             setLoading(true);
+                             setBatchResults([]);
+                             
+                             try {
+                               const data = await file.arrayBuffer();
+                               const workbook = read(data);
+                               const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                               const jsonData = utils.sheet_to_json(worksheet, { header: 1 });
+                               
+                               if (jsonData.length < 2) {
+                                  setError("File empty or missing headers");
+                                  setLoading(false);
+                                  return;
+                               }
+
+                               // Normalize headers
+                               const headers = (jsonData[0] as string[]).map(h => h?.toString().toLowerCase() || '');
+                               const latIdx = headers.findIndex(h => h.includes('lat'));
+                               const lonIdx = headers.findIndex(h => h.includes('lon'));
+                               
+                               if (latIdx === -1 || lonIdx === -1) {
+                                 setError("File must contain 'lat' and 'lon' columns");
+                                 setLoading(false);
+                                 return;
+                               }
+
+                               // Filter valid rows first to get total count
+                               const validRows = [];
+                               for(let i=1; i<jsonData.length; i++) {
+                                  const row = jsonData[i] as any[];
+                                  if(row && row.length > 0) {
+                                     const lat = parseFloat(row[latIdx]);
+                                     const lon = parseFloat(row[lonIdx]);
+                                     if(!isNaN(lat) && !isNaN(lon)) {
+                                        validRows.push({lat, lon});
+                                     }
+                                  }
+                               }
+
+                               setBatchProgress({ current: 0, total: validRows.length });
+                               const results = [];
+                               
+                               for(let i=0; i<validRows.length; i++) {
+                                 const {lat, lon} = validRows[i];
+                                 try {
+                                    // Simulated delay for UX if API is too fast, or actual API call
+                                    const res = await analyzeLocation({ lat, lon });
+                                    results.push(res);
+                                 } catch (err) {
+                                   console.error(`Failed to analyze ${lat},${lon}`, err);
+                                   // Optionally push a specific error result structure
+                                 }
+                                 setBatchProgress(prev => ({ ...prev, current: i + 1 }));
+                               }
+                               
+                               setBatchResults(results);
+                               setLoading(false);
+                             } catch (err) {
+                               console.error("File parse error:", err);
+                               setError("Failed to parse file.");
+                               setLoading(false);
+                             }
+                           }}
+                         />
+                         <div className="p-4 rounded-full bg-zinc-900 mb-4 group-hover:bg-blue-500/10 group-hover:scale-110 transition-all duration-300">
+                            <Zap className="w-6 h-6 text-zinc-500 group-hover:text-blue-400" />
+                         </div>
+                         <p className="text-sm text-zinc-400 mb-2 group-hover:text-white transition-colors">Click to upload CSV or Excel</p>
+                         <div className="flex gap-2">
+                            <Badge variant="outline" className="border-zinc-800 text-zinc-600 bg-zinc-900/50">.CSV</Badge>
+                            <Badge variant="outline" className="border-zinc-800 text-zinc-600 bg-zinc-900/50">.XLSX</Badge>
+                         </div>
+                      </CardContent>
+                    </Card>
+                  )}
                  </TabsContent>
               </Tabs>
             </div>
